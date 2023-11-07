@@ -1,51 +1,36 @@
 pipeline {
-    agent any
+  agent any
 
-    environment {
-        DOCKER_IMAGE_NAME = 'project'
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/NARENDIR/capstone-project.git', branch: 'dev'
+      }
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+    stage('Build and push to dev repo') {
+      when {
+        expression { branch == 'dev' }
+      }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_ID}")
-                }
-            }
-        }
-
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'your-docker-hub-credentials') {
-                        docker.image("${DOCKER_IMAGE_NAME}:${env.BUILD_ID}").push()
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to Server') {
-            steps {
-                sh './deploy.sh'
-            }
-        }
+      steps {
+        sh 'npm install'
+        sh 'npm run build'
+        sh './.build.sh'
+      }
     }
 
-    post {
-        success {
-            echo 'Pipeline successfully completed.'
-        }
-        failure {
-            echo 'Pipeline failed.'
-        }
+    stage('Build and push to prod repo') {
+      when {
+        expression { branch == 'main' }
+      }
+
+      steps {
+        sh 'npm install'
+        sh 'npm run build'
+        sh 'docker tag capstone-project:dev project:latest'
+        sh 'docker push narendiranr2/project:latest'
+      }
     }
+  }
 }
-
-
-
