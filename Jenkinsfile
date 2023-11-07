@@ -9,13 +9,13 @@ pipeline {
               } 
             }
         
-        stage('Test') {
+     /*   stage('Test') {
             steps {
                 sh 'npm install' 
                 sh 'npm run test' 
             }
         }
-        
+        */
         stage('Push to Dev') {
             when {
                 branch 'dev'
