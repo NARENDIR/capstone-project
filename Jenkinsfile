@@ -1,41 +1,40 @@
 pipeline {
     agent any
-    
+
+    environment {
+        DOCKER_HUB_USERNAME = credentials('narendiranr2')
+        DOCKER_HUB_PASSWORD = credentials('dckr_pat_325C7oay9o3gjdQyyZz9d0npX2Y')
+    }
+
     stages {
-        stage('Build') {
+        stage('Build and Push Docker Image') {
             steps {
-                sh 'chmod +x build.sh'
-                sh './build.sh'
-              } 
-            }    
-   
-        stage('Push to Dev') {
-            when {
-                branch 'dev'
-            }
-            steps {
-                sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                sh 'docker push dev/project'
+                script {
+                    if (env.BRANCH_NAME == 'origin/dev') {
+                        sh './build.sh'
+                        withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
+                            sh 'docker tag project narendiranr2/dev'
+                            sh 'docker push narendiranr2/dev'
+                        }
+                    } else if (env.BRANCH_NAME == 'origin/main') {
+                        sh './build.sh'
+                        withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
+                            sh 'docker tag project narendiranr2/prod'
+                            sh 'docker push narendiranr2/prod'
+                            error 'Deployment error'
+                        }
+                    }
+                }
             }
         }
-        
-        stage('Push to Prod') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                sh 'docker push prod/project'
-            }
+    }
+
+    post {
+        success {
+            echo 'Pipeline successfully completed.'
         }
-        
-        stage('Deploy') {
-            steps {
-                 sh 'chmod +x build.sh'
-                sh 'deploy.sh'
-            }
+        failure {
+            echo 'Pipeline failed.'
         }
-    } 
+    }
 }
-
-
