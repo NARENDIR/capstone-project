@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ $GIT_BRANCH== "origin/dev"]]; then 
+if [[ $GIT_BRANCH=="origin/dev"]]; then 
  ./build.sh
  
   docker login -u narendiranr2 -p dckr_pat_325C7oay9o3gjdQyyZz9d0npX2Y
@@ -14,5 +14,6 @@ elif [[ $GIT_BRANCH "origin/main" ]]; then
  docker login -u narendiranr2 -p dckr_pat_325C7oay9o3gjdQyyZz9d0npX2Y
  docker tag project narendirr2/prod
  docker push narendiranr2/prod
- echo "Deployment error"
+ else
+    echo "Deployment error"
 fi
