@@ -24,8 +24,6 @@ pipeline {
       }
 
       steps {
-        sh 'npm install'
-        sh 'npm run build'
         sh 'docker tag capstone-project:dev project:latest'
         sh 'docker push narendiranr2/project:latest'
       }
