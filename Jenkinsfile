@@ -1,5 +1,12 @@
 pipeline {
     agent any
+    stages {
+        stage('Checkout') {
+            steps {
+               git branch: 'main',
+               url: 'https://github.com/NARENDIR/capstone-project.git'
+            }
+        }
 
     environment {
         DOCKER_HUB_USERNAME = credentials('narendiranr2')
