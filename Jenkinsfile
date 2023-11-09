@@ -21,7 +21,7 @@ pipeline {
                         withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
                             sh 'docker tag project narendiranr2/prod'
                             sh 'docker push narendiranr2/prod'
-                            else {
+                      else {
                         echo "Branch not supported for automated build and push."
                         // Add any other branches or actions as needed
                     }
