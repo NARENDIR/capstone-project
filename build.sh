@@ -1,12 +1,20 @@
 #!/bin/bash
+if [[ $GIT_BRANCH== "origin/dev"]]; then 
+ ./build.sh
+ 
+docker login -u narendiranr2 -p dckr_pat_325C7oay9o3gjdQyyZz9d0npX2Y
 
-# Define the Docker image name and tag
-IMAGE_NAME=project
-TAG="latest"
+#Tag the image 
+docker tag project narendiranr2/dev
+#Push the image to the Dev Docker Hub repository docker
+push narendiranr2/dev
 
-# Build the Docker image using the provided Dockerfile
-docker build -t $IMAGE_NAME:$TAG .
+elif [[ $GIT_BRANCH "origin/main" ]]; then 
+./build.sh
+docker login -u narendiranr2 -p dckr_pat_325C7oay9o3gjdQyyZz9d0npX2Y
+docker tag project narendirr2/prod
+docker push narendiranr2/prod
+echo "Deployment error"
+fi
 
-# Display a message indicating the image has been built
-echo "Docker image $IMAGE_NAME:$TAG has been built successfully."
 
