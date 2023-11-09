@@ -7,7 +7,7 @@ if [[ $GIT_BRANCH == "origin/dev" ]]; then
 #Tag the image 
  docker tag project narendiranr2/dev
 #Push the image to the Dev Docker Hub repository docker
- push narendiranr2/dev
+  docker push narendiranr2/dev
 
 elif [[ $GIT_BRANCH == "origin/main" ]]; then 
  ./build.sh
