@@ -29,7 +29,7 @@ pipeline {
         
         stage('Push to Prod') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
