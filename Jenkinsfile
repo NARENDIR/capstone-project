@@ -1,10 +1,5 @@
 pipeline {
     agent any
-
-     environment {
-        DOCKER_HUB_USERNAME = credentials('narendiranr2')
-        DOCKER_HUB_PASSWORD = credentials('dckr_pat_325C7oay9o3gjdQyyZz9d0npX2Y')
-    }
     stages {
         stage('Checkout') {
             steps {
