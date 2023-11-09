@@ -16,17 +16,16 @@ pipeline {
                             sh 'docker tag project narendiranr2/dev'
                             sh 'docker push narendiranr2/dev'
                         }
-                    } else if (env.BRANCH_NAME == 'origin/main') {
+                    } else  (env.BRANCH_NAME == 'origin/main') {
                         sh './build.sh'
                         withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
                             sh 'docker tag project narendiranr2/prod'
                             sh 'docker push narendiranr2/prod'
-                            error 'Deployment error'
                         }
                     }
                 }
             }
         }
     }
-    }
+}
 
