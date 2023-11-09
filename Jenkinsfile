@@ -7,7 +7,8 @@ pipeline {
                 sh 'chmod +x build.sh'
                 sh './build.sh'
               } 
-            }
+            }    
+   
         stage('Push to Dev') {
             when {
                 branch 'dev'
@@ -36,3 +37,5 @@ pipeline {
         }
     } 
 }
+
+
